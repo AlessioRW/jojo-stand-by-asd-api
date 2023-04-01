@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import time as Time
 from fastapi.middleware.cors import CORSMiddleware
-import cv2, base64, os
+import cv2, base64, os, io
 
 app = FastAPI()
 
@@ -89,13 +89,19 @@ def graph(userScore: str, standScore: str, standName: str):
     plt.title(' ', size=20, y=1.05)
     lines, labels = plt.thetagrids(np.degrees(label_loc), labels=categories)
     plt.legend(loc='lower center')
-    plt.savefig('images/stats-'+time+'.png')
+    # plt.savefig('images/stats-'+time+'.png')
 
-    im = cv2.imread("images/stats-"+time+".png")
-    _, encoded_img = cv2.imencode('.PNG', im)
-    encoded_img = base64.b64encode(encoded_img)
+    # im = cv2.imread("images/stats-"+time+".png")
+    # _, encoded_img = cv2.imencode('.PNG', im)
+    # encoded_img = base64.b64encode(encoded_img)
 
-    os.remove("images/stats-"+time+".png")
+    # os.remove("images/stats-"+time+".png")
 
-    return 200,{'buffer': encoded_img}
+
+    my_stringIObytes = io.BytesIO()
+    plt.savefig(my_stringIObytes, format='jpg')
+    my_stringIObytes.seek(0)
+    my_base64_jpgData = base64.b64encode(my_stringIObytes.read()).decode()
+
+    return 200,{'buffer': my_base64_jpgData}
     

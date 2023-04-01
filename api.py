@@ -1,7 +1,6 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI
 import numpy as np
 import matplotlib.pyplot as plt
-from fastapi.responses import FileResponse
 import time as Time
 from fastapi.middleware.cors import CORSMiddleware
 import cv2, base64, os
